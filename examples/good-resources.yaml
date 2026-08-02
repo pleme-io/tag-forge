@@ -1,0 +1,36 @@
+# Sample plan — every resource is fully tagged.
+# Run: tag-forge --config configs/default.yaml validate examples/good-resources.yaml
+
+resources:
+  - id: aws/ec2/i-0123456789abcdef0
+    kind: aws_instance
+    tags:
+      cost_center: cc-api
+      environment: prod
+      owner: gateway-team@example.com
+      product: api-gateway
+      criticality: T0
+      compliance: soc2
+      lifecycle: permanent
+
+  - id: gcp/gke/cluster-a/pod/auth-7d9
+    kind: kubernetes_pod
+    tags:
+      cost_center: cc-node-default
+      environment: prod
+    labels:
+      cost_center: cc-platform
+      environment: prod
+      owner: auth-team@example.com
+      product: identity
+      criticality: T0
+      compliance: soc2
+
+  - id: aws/s3/audit-logs-2026
+    kind: aws_s3_bucket
+    tags:
+      cost_center: cc-observability
+      environment: prod
+      owner: sre@example.com
+      lifecycle: permanent
+      compliance: soc2

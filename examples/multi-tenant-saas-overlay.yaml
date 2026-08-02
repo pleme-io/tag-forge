@@ -1,0 +1,64 @@
+# Example consumer overlay — illustrates the `extends:` pattern for a
+# fictional multi-tenant SaaS company. **All names below are illustrative,
+# not real.** Real org overlays live in a separate private repo and are
+# versioned independently of the tool.
+#
+# This file shows the *shape* an overlay takes:
+#   - extends a generic reference
+#   - tightens validators (string -> enum) where the org has a closed set
+#   - adds dimensions required for the org's domain (e.g. `tenant` for multi-tenancy)
+#   - adds virtual-allocation rules for org-specific untaggable spend
+#
+# Run: tag-forge --config examples/multi-tenant-saas-overlay.yaml taxonomy print
+
+extends: ../configs/default.yaml
+
+taxonomy:
+  required:
+    # cost_center, environment, owner inherited from base.
+    # This fictional org adds tenant + product as additionally required —
+    # typical for multi-tenant SaaS.
+    - cost_center
+    - environment
+    - owner
+    - tenant
+    - product
+
+  validators:
+    tenant:
+      type: enum
+      values:
+        - tenant-a
+        - tenant-b
+        - tenant-c
+        - tenant-d
+        - shared
+        - internal
+
+    cost_center:
+      type: enum
+      values:
+        - cc-frontend
+        - cc-api
+        - cc-data
+        - cc-platform
+        - cc-observability
+        - cc-cicd
+        - cc-shared-infra
+
+    product:
+      type: enum
+      values:
+        - product-alpha
+        - product-beta
+        - shared-platform
+
+  virtual_allocation:
+    # Org-specific untaggable spend rules. The pattern: name the cost
+    # pool, declare how it's allocated.
+    nat_gateway_pool:
+      rule: proportional_by_egress
+    cicd_cluster_shared:
+      rule: equal_split_across_consumers
+    shared_observability_stack:
+      rule: proportional_by_log_volume

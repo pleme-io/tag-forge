@@ -1,0 +1,58 @@
+# tag-forge — generic reference taxonomy
+#
+# This file ships with the binary as the canonical starting point. Consumers
+# inherit it via `extends:` and overlay org-specific dimensions / values on top.
+#
+# Example overlay (org-side):
+#
+#   extends: /path/to/this/file
+#   taxonomy:
+#     required: [cost_center, tenant]
+#     validators:
+#       tenant: { type: enum, values: [tenant-a, tenant-b, ...] }
+
+taxonomy:
+  required:
+    - cost_center
+    - environment
+    - owner
+
+  optional:
+    - product
+    - tenant
+    - criticality
+    - compliance
+    - lifecycle
+    - application
+
+  validators:
+    cost_center:
+      type: string
+      regex: "^cc-[a-z0-9-]+$"
+
+    environment:
+      type: enum
+      values: [dev, staging, prod, perf]
+
+    owner:
+      type: string
+      # owner is a free-form contact handle (email, alias, Slack group);
+      # no regex enforced at the generic level.
+
+    criticality:
+      type: enum
+      values: [T0, T1, T2, T3]
+
+    compliance:
+      type: enum
+      values: [none, soc2, hipaa, fedramp, pci]
+
+    lifecycle:
+      type: enum
+      values: [permanent, temporary, experimental, ephemeral]
+
+  virtual_allocation:
+    # Untaggable spend gets allocated by these rules. Org overlays should add
+    # their own (NAT pools, CICD clusters, shared egress, etc.).
+    shared_egress_pool:
+      rule: proportional_by_egress

@@ -1,0 +1,36 @@
+# Sample plan — each resource has at least one violation.
+# Run: tag-forge --config configs/default.yaml validate examples/bad-resources.yaml
+#
+# Expected exit: non-zero. Use --no-fail to keep zero exit while reporting.
+
+resources:
+  # Missing required `cost_center`.
+  - id: aws/ec2/i-missing-cc
+    kind: aws_instance
+    tags:
+      environment: prod
+      owner: somebody@example.com
+
+  # `cost_center` doesn't match the regex (^cc-[a-z0-9-]+$).
+  - id: aws/ec2/i-bad-cc-format
+    kind: aws_instance
+    tags:
+      cost_center: "Gateway"
+      environment: prod
+      owner: somebody@example.com
+
+  # `environment` not in the configured enum.
+  - id: gcp/gke/pod-bad-env
+    kind: kubernetes_pod
+    labels:
+      cost_center: cc-platform
+      environment: qa
+      owner: auth@example.com
+
+  # Multiple violations: missing cost_center + bad criticality value.
+  - id: azure/blob/unknown
+    kind: azure_blob_container
+    tags:
+      environment: prod
+      owner: storage@example.com
+      criticality: super-important
