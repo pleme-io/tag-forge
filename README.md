@@ -23,7 +23,7 @@ This is the central architectural decision and worth saying explicitly:
 | **The binary** (`tag-forge`, all `*-forge` siblings) | pleme-io — public, MIT | Generic FinOps framework, applies to any org |
 | **The reference taxonomy** (`configs/default.yaml`) | pleme-io — public | Sensible defaults; OSS adopters get a working start |
 | **The illustrative overlay** (`examples/multi-tenant-saas-overlay.yaml`) | pleme-io — public | Pattern documentation; uses fictional names |
-| **Generic skills** (e.g. `tag-architecture/SKILL.md`) | pleme-io/blackmatter-claude — public | Workflow guidance that applies to any consumer |
+| **Generic skills** (e.g. `finops/SKILL.md`) | pleme-io/blackmatter-claude — public | Workflow guidance that applies to any consumer |
 | **Org-specific overlays** (real tenants, real cost centers, real product enums) | private org repo (e.g. `your-org/finops-config`) | Embeds business-internal names and customer-shaped values |
 
 The boundary is clean: every line of code, schema, and reference doc is open
